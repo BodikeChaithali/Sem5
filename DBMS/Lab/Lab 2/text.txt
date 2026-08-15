@@ -1,0 +1,254 @@
+bodike@bodike-chaithali:~/Desktop/Sem5/DBMS/Lab/Lab 2$ sqlite3 lab2.db < university.sql
+bodike@bodike-chaithali:~/Desktop/Sem5/DBMS/Lab/Lab 2$ ls
+lab02.pdf  lab2.db  university.sql
+bodike@bodike-chaithali:~/Desktop/Sem5/DBMS/Lab/Lab 2$ sqlit3 lab2.db 
+Command 'sqlit3' not found, did you mean:
+  command 'sqlitr' from snap sqlitr (0.1.23)
+  command 'sqlite' from deb sqlite (2.8.17-15fakesync1build1)
+  command 'sqlite3' from deb sqlite3 (3.37.2-2ubuntu0.6)
+See 'snap info <snapname>' for additional versions.
+bodike@bodike-chaithali:~/Desktop/Sem5/DBMS/Lab/Lab 2$ sqlite3 lab2.db 
+SQLite version 3.37.2 2022-01-06 13:25:41
+Enter ".help" for usage hints.
+sqlite> .tables
+advisor     course      instructor  section     takes     
+classroom   department  prereq      student     teaches   
+sqlite> pragma foreign_keys = ON;
+sqlite> .schema student
+CREATE TABLE student (
+    id         TEXT     PRIMARY KEY,
+    name       TEXT     NOT NULL,
+    dept_name  TEXT     REFERENCES department (dept_name),
+    tot_cred   INTEGER  CHECK (tot_cred >= 0)
+);
+sqlite> .quit
+bodike@bodike-chaithali:~/Desktop/Sem5/DBMS/Lab/Lab 2$ touch lab02_solution.sql
+bodike@bodike-chaithali:~/Desktop/Sem5/DBMS/Lab/Lab 2$ ls
+lab02.pdf  lab02_solution.sql  lab2.db	university.sql
+bodike@bodike-chaithali:~/Desktop/Sem5/DBMS/Lab/Lab 2$ sqlite3 lab2.db
+SQLite version 3.37.2 2022-01-06 13:25:41
+Enter ".help" for usage hints.
+sqlite> .tables
+advisor     course      instructor  section     takes     
+classroom   department  prereq      student     teaches   
+sqlite> .schema department
+CREATE TABLE department (
+    dept_name  TEXT     PRIMARY KEY,
+    building   TEXT,
+    budget     NUMERIC  CHECK (budget > 0)
+);
+sqlite> select c.title as titles from course c inner join department d on c.dept_name = d.dept_name where d.dept_name = 'Comp. Sci.';
+Intro. to Computer Science
+Game Design
+Robotics
+Image Processing
+Database System Concepts
+sqlite> select title from course where dept_name = 'Comp. Sci.';
+Intro. to Computer Science
+Game Design
+Robotics
+Image Processing
+Database System Concepts
+sqlite> select name , round(salary / 12.0,2) as monthly_pay from instructor where salary between 70000 and 90000 order by monthly_pay desc;
+Wu|7500.0
+Gold|7250.0
+Singh|6666.67
+Kim|6666.67
+Katz|6250.0
+Crick|6000.0
+sqlite> select distinct semester from section;
+Summer
+Fall
+Spring
+sqlite> select id,name,tot_cred from student order by tot_cred desc , name limit 3;
+98988|Tanaka|120
+23121|Chavez|110
+00128|Zhang|102
+sqlite> select course_id,title from course where title in ('%System%','%system%') and (not title like '%Intro%'; 
+Error: in prepare, near ";": syntax error (1)
+sqlite> select course_id,title from course where title in ('%System%','%system%') and (not title like '%Intro%'); 
+sqlite> select course_id,title from course where title like '%System%' or title like '%system%' and (not title like '%Intro%'); 
+CS-347|Database System Concepts
+EE-181|Intro. to Digital Systems
+sqlite> select course_id,title from course where (title like '%System%' or title like '%system%') and (not title like '%Intro%'); 
+CS-347|Database System Concepts
+sqlite> select dept_name from department where dept_name not in ('History','Music') order by dept_name,name;
+Error: in prepare, no such column: name (1)
+sqlite> select dept_name from instructor where dept_name not in ('History','Music') order by dept_name,name;
+Biology
+Comp. Sci.
+Comp. Sci.
+Comp. Sci.
+Elec. Eng.
+Finance
+Finance
+Physics
+Physics
+sqlite> select name,dept_name from instructor where dept_name not in ('History','Music') order by dept_name,name;
+Crick|Biology
+Brandt|Comp. Sci.
+Katz|Comp. Sci.
+Srinivasan|Comp. Sci.
+Kim|Elec. Eng.
+Singh|Finance
+Wu|Finance
+Einstein|Physics
+Gold|Physics
+sqlite> select count(*) from instructor;
+12
+sqlite> select name , salary,case salary >= 90000 then "High" else salary between 89999 and 70000 then "Medium: else then "Low" end as salary_category;
+   ...> ;
+   ...> ^C
+   ...> from instructor;
+bodike@bodike-chaithali:~/Desktop/Sem5/DBMS/Lab/Lab 2$ sqlite3 lab2.db
+SQLite version 3.37.2 2022-01-06 13:25:41
+Enter ".help" for usage hints.
+sqlite> select name , salary , case salary >= 90000 then "High" else salary between 89999 ans 70000 then "Medium" else "Low" end as salary_category from instructor;
+Error: in prepare, near "then": syntax error (1)
+sqlite> select name , salary , case when salary >= 90000 then "High" when salary between 89999 ans 70000 then "Medium" else "Low" end as salary_category from instructor;
+Error: in prepare, near "ans": syntax error (1)
+sqlite> select name , salary , case salary >= 90000 then "High" else salary between 89999 and 70000 then "Medium" else "Low" end as salary_category from instructor;
+Error: in prepare, near "then": syntax error (1)
+sqlite> select name , salary , case salary >= 90000 then "High" else salary between 70000 and 89999 then "Medium" else "Low" end as salary_category from instructor;
+Error: in prepare, near "then": syntax error (1)
+sqlite> select name , salary , case when salary >= 90000 then "High" when salary between 70000 and 89999 then "Medium" else "Low" end as salary_category from instructor;
+Srinivasan|95000|High
+Wu|90000|High
+Mozart|40000|Low
+Einstein|95000|High
+El Said|60000|Low
+Gold|87000|Medium
+Katz|75000|Medium
+Califieri|62000|Low
+Singh|80000|Medium
+Crick|72000|Medium
+Brandt|92000|High
+Kim|80000|Medium
+sqlite> select name,tot_cred from students where tot_cred % 10 = 0 and (not tot_cred = 0);
+Error: in prepare, no such table: students (1)
+sqlite> select name,tot_cred from student where tot_cred % 10 = 0 and (not tot_cred = 0);
+Brandt|80
+Chavez|110
+Aoi|60
+Tanaka|120
+sqlite> select name,tot_cred from student where tot_cred % 10 = 0 and tot_cred != 0;
+Brandt|80
+Chavez|110
+Aoi|60
+Tanaka|120
+sqlite> select s.name , d.building from student s inner join department d on d.dept_name = s.dept_name;
+Zhang|Taylor
+Shankar|Taylor
+Brandt|Painter
+Chavez|Painter
+Peltier|Watson
+Levy|Watson
+Williams|Taylor
+Sanchez|Watson
+Snow|Watson
+Brown|Taylor
+Aoi|Taylor
+Bourikas|Taylor
+Tanaka|Watson
+Martin|Watson
+Okafor|Taylor
+sqlite> select i.name,c.title from instructor i inner join teaches t on i,id = t.id inner join section s on t.course_id = s.course_id inner join course c on c.course_id = s.course_id;
+Error: in prepare, near "=": syntax error (1)
+sqlite> select i.name,c.title from instructor i inner join teaches t on i.id = t.id inner join section s on t.course_id = s.course_id inner join course c on c.course_id = s.course_id;
+Srinivasan|Intro. to Computer Science
+Srinivasan|Intro. to Computer Science
+Srinivasan|Database System Concepts
+Srinivasan|Robotics
+Brandt|Game Design
+Brandt|Game Design
+Brandt|Game Design
+Brandt|Game Design
+Katz|Intro. to Computer Science
+Katz|Intro. to Computer Science
+Katz|Image Processing
+Katz|Image Processing
+Kim|Intro. to Digital Systems
+Crick|Intro. to Biology
+Crick|Genetics
+Einstein|Physical Principles
+El Said|World History
+Mozart|Music Video Production
+Wu|Investment Banking
+sqlite> select i.name,c.title from instructor i inner join teaches t on i.id = t.id inner join section s on t.course_id = s.course_id and t.sec_id = s.sec_id and t.semester = s.semester and t.year = s.year inner join course c on c.course_id = s.course_id;
+Srinivasan|Intro. to Computer Science
+Srinivasan|Database System Concepts
+Srinivasan|Robotics
+Brandt|Game Design
+Brandt|Game Design
+Katz|Intro. to Computer Science
+Katz|Image Processing
+Kim|Intro. to Digital Systems
+Crick|Intro. to Biology
+Crick|Genetics
+Einstein|Physical Principles
+El Said|World History
+Mozart|Music Video Production
+Wu|Investment Banking
+sqlite> select st.name,c.title,t.grade from student st inner join takes t on st.id = t.id inner join section s on t.course_id = s.course_id and t.sec_id = s.sec_id and t.semester = s.semester and t.year = s.year nner join course c on c.course_id = s.course_id;
+Error: in prepare, near "nner": syntax error (1)
+sqlite> select st.name,c.title,t.grade from student st inner join takes t on st.id = t.id inner join section s on t.course_id = s.course_id and t.sec_id = s.sec_id and t.semester = s.semester and t.year = s.year inner join course c on c.course_id = s.course_id;
+Zhang|Intro. to Computer Science|A
+Zhang|Database System Concepts|A-
+Shankar|Intro. to Computer Science|C
+Shankar|Game Design|A
+Shankar|Robotics|A
+Shankar|Database System Concepts|A
+Williams|Intro. to Computer Science|A-
+Williams|Game Design|B+
+Brown|Intro. to Computer Science|A
+Brown|Image Processing|B
+Chavez|Investment Banking|C+
+Peltier|Physical Principles|B-
+Levy|Intro. to Computer Science|F
+Levy|Image Processing|B+
+Levy|Physical Principles|B+
+Bourikas|Intro. to Computer Science|C-
+Bourikas|Robotics|B
+Tanaka|Intro. to Biology|A
+Tanaka|Genetics|
+Martin|Intro. to Biology|B
+Brandt|World History|B
+Sanchez|Music Video Production|A-
+Aoi|Intro. to Digital Systems|C
+Zhang|Robotics|
+sqlite> select s.name from student s inner join advisor a on s.id = a.s_id inner join instructor i on a.i_id = i.id where i.name like 'Katz'; 
+Zhang
+Brown
+sqlite> select c.title , cl.capacity from section s inner join classrom cl on s.building = cl.building and s.room_no = cl.room_no inner join on course c s.course_id = c.course_id;
+Error: in prepare, near "on": syntax error (1)
+sqlite> select c.title , cl.capacity from section s inner join classrom cl on s.building = cl.building and s.room_no = cl.room_no inner join course c on  s.course_id = c.course_id;
+Error: in prepare, no such table: classrom (1)
+sqlite> select c.title , cl.capacity from section s inner join classorom cl on s.building = cl.building and s.room_no = cl.room_no inner join course c on  s.course_id = c.course_id;
+Error: in prepare, no such table: classorom (1)
+sqlite> select c.title , cl.capacity from section s inner join classroom cl on s.building = cl.building and s.room_no = cl.room_no inner join course c on  s.course_id = c.course_id;
+Intro. to Computer Science|70
+Intro. to Computer Science|70
+Game Design|70
+Game Design|70
+Robotics|50
+Image Processing|30
+Image Processing|70
+Database System Concepts|70
+Investment Banking|20
+World History|20
+Music Video Production|20
+Physical Principles|30
+Intro. to Digital Systems|40
+Intro. to Biology|60
+Genetics|60
+Calculus I|50
+sqlite> select distinct d.building from section s inner join course c on s.course_id = c.course_id inner join department d on c.dept_name = d.dept_name;
+Watson
+Taylor
+Painter
+sqlite> select distinct i.name from instructor i inner join teaches t on i.id = t.id inner join section s on t.course_id = s.course_id and t.sec_id = s.sec_id and t.semester = s.semester and t.year = s.year where s.building = 'Taylor';
+Srinivasan
+Brandt
+Katz
+Kim
+sqlite> .quit
