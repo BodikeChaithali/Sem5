@@ -1,0 +1,5 @@
+System started
+User logged in
+Error opening file
+Connection successful
+Error reading file

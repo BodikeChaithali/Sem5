@@ -1,0 +1,10 @@
+This is the first line.
+This is the second line.
+Operating systems use system calls.
+We are learning file handling.
+This is line five.
+This is line six.
+This is line seven.
+This is line eight.
+This is line nine.
+This is line ten.
