@@ -1,0 +1,61 @@
+QUESTION 1 – RESULTS
+
+POS TAGGING
+-----------
+
+English Trigram HMM: 95.17%
+English Most-Frequent-Tag Baseline: 93.73%
+
+Spanish Trigram HMM: 91.58%
+Spanish Most-Frequent-Tag Baseline: 88.60%
+
+Spanish Morphology-Aware HMM: 89.12%
+Spanish Morphology-Aware Baseline: 85.38%
+
+SEGMENTATION + POS PIPELINE
+---------------------------
+
+English:
+Trigram + DP accuracy: 85.02%
+Greedy baseline accuracy: 70.94%
+
+Segmentation Precision: 90.34%
+Segmentation Recall: 99.66%
+Segmentation F1: 92.70%
+
+Spanish:
+Trigram + DP accuracy: 82.73%
+Greedy baseline accuracy: 54.00%
+
+Segmentation Precision: 84.31%
+Segmentation Recall: 99.23%
+Segmentation F1: 89.71%
+
+BASELINE IMPROVEMENT
+--------------------
+
+English POS improvement: +1.44 percentage points
+Spanish POS improvement: +2.97 percentage points
+
+English pipeline improvement: +14.09 percentage points
+Spanish pipeline improvement: +28.73 percentage points
+
+ERROR SOURCE
+------------
+
+English:
+Segmentation-caused: 24,541 (81.22%)
+Genuine tagging: 5,675 (18.78%)
+
+Spanish:
+Segmentation-caused: 1,384 (74.69%)
+Genuine tagging: 469 (25.31%)
+
+MORPHOLOGY
+----------
+
+Spanish gender accuracy: 95.19%
+Spanish number accuracy: 95.37%
+
+Plain POS accuracy: 91.58%
+Morphology-aware exact-tag accuracy: 89.12%
