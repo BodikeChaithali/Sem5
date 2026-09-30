@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
 
 	if (argc != 3) return 1;
 	
-	fd = open(argv[22], O_CREAT | O_WRONLY,0644);
+	fd = open(argv[2], O_CREAT | O_WRONLY,0644);
 
 	if (fd == -1) {
 		perror("open");
