@@ -1,0 +1,31 @@
+(define (problem mars-rover-1)
+  (:domain mars-rover)
+  (:objects
+    base sitea siteb sitec sited sitee sitef - location
+    curiosity - rover
+    bay1 bay2 - bay
+    rock1 rock2 rock3 rock4 rock5 - rock
+    drill1 - drill)
+
+  (:init
+    (rover-at curiosity base)
+    (drill-at drill1 sitee)
+    (rock-at rock1 sitea) (rock-at rock2 siteb) (rock-at rock3 sitec)
+    (rock-at rock4 sited) (rock-at rock5 sitef)
+    (soft rock1) (soft rock2) (hard rock3) (soft rock4) (hard rock5)
+    (bay-empty bay1) (bay-empty bay2)
+    (connected base sitea) (connected sitea base)
+    (connected base siteb) (connected siteb base)
+    (connected sitea sitec) (connected sitec sitea)
+    (connected siteb sited) (connected sited siteb)
+    (connected sitec sitee) (connected sitee sitec)
+    (connected sited sitee) (connected sitee sited)
+    (connected sitee sitef) (connected sitef sitee)
+    (connected sitec sited))
+
+  (:goal (and
+    (rock-at rock1 base) (rock-at rock2 base) (rock-at rock3 base)
+    (rock-at rock4 base) (rock-at rock5 base)
+    (bay-empty bay1) (bay-empty bay2)
+    (rover-at curiosity base)))
+)

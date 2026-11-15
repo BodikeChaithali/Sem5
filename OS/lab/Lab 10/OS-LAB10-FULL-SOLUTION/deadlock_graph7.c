@@ -1,0 +1,47 @@
+#include <stdio.h>
+#define NPROC 7
+#define NRES 6
+int A[NRES] = {0,1,0,0,0,0};
+int C[NPROC][NRES] = {{{1,0,0,0,0,0}, {0,0,0,0,0,0}, {0,0,0,0,0,0}, {0,0,0,1,0,0}, {0,0,1,0,0,0}, {0,0,0,0,0,1}, {0,0,0,0,1,0}}};
+int R[NPROC][NRES] = {{{0,1,0,0,0,0}, {0,0,1,0,0,0}, {0,1,0,0,0,0}, {0,1,1,0,0,0}, {0,0,0,0,1,0}, {0,1,0,0,0,0}, {0,0,0,1,0,0}}};
+
+int detect(int finished[NPROC]) {
+    int work[NRES];
+    for (int j = 0; j < NRES; ++j) work[j] = A[j];
+    for (int i = 0; i < NPROC; ++i) finished[i] = 0;
+    int progress = 1;
+    while (progress) {
+        progress = 0;
+        for (int i = 0; i < NPROC; ++i) {
+            if (finished[i]) continue;
+            int ok = 1;
+            for (int j = 0; j < NRES; ++j)
+                if (R[i][j] > work[j]) ok = 0;
+            if (ok) {
+                for (int j = 0; j < NRES; ++j) work[j] += C[i][j];
+                finished[i] = 1;
+                progress = 1;
+                printf("P%d finishes, A =", i + 1);
+                for (int j = 0; j < NRES; ++j) printf(" %d", work[j]);
+                printf("\\n");
+            }
+        }
+    }
+    int deadlocked = 0;
+    for (int i = 0; i < NPROC; ++i) if (!finished[i]) ++deadlocked;
+    return deadlocked;
+}
+
+static void print_deadlocked(const int finished[NPROC]) {
+    printf("DEADLOCK, deadlocked processes:");
+    for (int i = 0; i < NPROC; ++i)
+        if (!finished[i]) printf(" P%d", i + 1);
+    printf("\\n");
+}
+
+int main(void) {
+    int finished[NPROC];
+    if (detect(finished) == 0) printf("No deadlock\n");
+    else print_deadlocked(finished);
+    return 0;
+}

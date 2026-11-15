@@ -1,0 +1,23 @@
+
+-- for every instructor count the distinct students who took a section that the instructor taught 
+-- instructor who taught nobady count 0 Lis only instructors whose count is above the average count
+-- ober all the instructors with their count that average
+-- using only completed orders , report for every
+-- customer the number of orders the longest gap in days
+-- between two consecutive orders (Null if fewer than two),and the percetage of the customers spend 
+-- that came from thier single most expensive order. sort by the gap longest first,nulls last
+-- for each genre find the user(s) with the most total watch minutes in that genre(keep ties) their share(%) of the genres total minutes ans whether they have rated at least one title of that genre('yes'/'no')
+# (a) Inside the existing trancation of borrow_book,refuse a loan 
+# is the member alreafy has 2 unreturned loans or already
+# holds an unreturened copy of that book (b)
+# add transfer_loan that, in one trancation returns from_members open loan
+# and lends the book to to_member book copies end unchanged and if amu rulle fails nothing changes
+# keep every query parameterized and runnable on both sqlite and postgresql.Extend
+# selftest to prove both rules and the rollback
+# add heapfile.update(rid,record) that never changes a record rid overwrite 
+# in place if it fits,else move it within its page(compacting if needed) else
+# store it on another page and trun the old slot into a forwarding pointer.Afterwards
+# get(rid) must return the new bytes, delete (rid) must remove them scan() must yeild the record 
+# exactly once under its ooriginal RID compaction must keep forwarding intact and repeated
+# updates must never create a chain longer than one hop Explain your slot encoding in a comment and add pytest tests for everycase
+

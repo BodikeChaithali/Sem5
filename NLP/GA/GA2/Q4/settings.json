@@ -1,0 +1,59 @@
+{
+  "seed": 42,
+  "n_train": 19999,
+  "n_val": 1000,
+  "n_test": 1000,
+  "batch": 64,
+  "lr": 0.001,
+  "clip": 1.0,
+  "dropout": 0.3,
+  "embedding_dim": 256,
+  "hidden_dim": 512,
+  "gen_configs": {
+    "greedy": {
+      "strategy": "greedy"
+    },
+    "temp0.5": {
+      "strategy": "temp",
+      "temperature": 0.5
+    },
+    "temp0.8": {
+      "strategy": "temp",
+      "temperature": 0.8
+    },
+    "temp1.2": {
+      "strategy": "temp",
+      "temperature": 1.2
+    },
+    "topk10": {
+      "strategy": "topk",
+      "k": 10,
+      "temperature": 1.0
+    },
+    "topk40": {
+      "strategy": "topk",
+      "k": 40,
+      "temperature": 1.0
+    }
+  },
+  "gen_max_tokens": 120,
+  "n_eval_prompts": 100,
+  "twist_configs": [
+    "temp0.8",
+    "topk10"
+  ],
+  "seeds": {
+    "split_and_training": 42,
+    "part3_samples": [
+      42,
+      43
+    ],
+    "part4_challenge": 42,
+    "part5_prompt_i": "SEED + i",
+    "human_eval_sampling": 42
+  },
+  "human_eval": {
+    "n_samples": 12,
+    "n_raters": 3
+  }
+}

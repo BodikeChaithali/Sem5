@@ -1,0 +1,236 @@
+==============================================================================
+SCENARIO 1 | Satisficing: Greedy Best-First Search + h_add
+==============================================================================
+ 1. (move curiosity base sitea)
+ 2. (collect-soft curiosity rock1 sitea bay1)
+ 3. (move curiosity sitea base)
+ 4. (deposit curiosity rock1 base bay1)
+ 5. (move curiosity base siteb)
+ 6. (collect-soft curiosity rock2 siteb bay1)
+ 7. (move curiosity siteb base)
+ 8. (deposit curiosity rock2 base bay1)
+ 9. (move curiosity base sitea)
+10. (move curiosity sitea sitec)
+11. (move curiosity sitec sited)
+12. (collect-soft curiosity rock4 sited bay1)
+13. (move curiosity sited siteb)
+14. (move curiosity siteb base)
+15. (deposit curiosity rock4 base bay1)
+16. (move curiosity base sitea)
+17. (move curiosity sitea sitec)
+18. (move curiosity sitec sitee)
+19. (pick-drill curiosity drill1 sitee)
+20. (move curiosity sitee sitec)
+21. (collect-hard curiosity rock3 sitec bay1 drill1)
+22. (move curiosity sitec sitea)
+23. (move curiosity sitea base)
+24. (deposit curiosity rock3 base bay1)
+25. (move curiosity base sitea)
+26. (move curiosity sitea sitec)
+27. (move curiosity sitec sitee)
+28. (move curiosity sitee sitef)
+29. (collect-hard curiosity rock5 sitef bay1 drill1)
+30. (move curiosity sitef sitee)
+31. (move curiosity sitee sitec)
+32. (move curiosity sitec sitea)
+33. (move curiosity sitea base)
+34. (deposit curiosity rock5 base bay1)
+Plan length (number of actions in plan): 34
+Total number of (grounded) actions in the problem: 162
+States expanded: 78 | states generated: 221
+Planning time: 0.04 s
+==============================================================================
+SCENARIO 1 | Optimal: A* + LM-cut
+==============================================================================
+ 1. (move curiosity base siteb)
+ 2. (collect-soft curiosity rock2 siteb bay1)
+ 3. (move curiosity siteb sited)
+ 4. (collect-soft curiosity rock4 sited bay2)
+ 5. (move curiosity sited siteb)
+ 6. (move curiosity siteb base)
+ 7. (deposit curiosity rock2 base bay1)
+ 8. (deposit curiosity rock4 base bay2)
+ 9. (move curiosity base sitea)
+10. (move curiosity sitea sitec)
+11. (move curiosity sitec sitee)
+12. (pick-drill curiosity drill1 sitee)
+13. (move curiosity sitee sitef)
+14. (collect-hard curiosity rock5 sitef bay1 drill1)
+15. (move curiosity sitef sitee)
+16. (move curiosity sitee sitec)
+17. (collect-hard curiosity rock3 sitec bay2 drill1)
+18. (move curiosity sitec sitea)
+19. (move curiosity sitea base)
+20. (deposit curiosity rock3 base bay2)
+21. (deposit curiosity rock5 base bay1)
+22. (move curiosity base sitea)
+23. (collect-soft curiosity rock1 sitea bay1)
+24. (move curiosity sitea base)
+25. (deposit curiosity rock1 base bay1)
+Plan length (number of actions in plan): 25
+Total number of (grounded) actions in the problem: 162
+States expanded: 6741 | states generated: 13781
+Planning time: 34.88 s
+==============================================================================
+SCENARIO 1 | Optimal: Breadth-First Search
+==============================================================================
+ 1. (move curiosity base sitea)
+ 2. (move curiosity sitea sitec)
+ 3. (move curiosity sitec sitee)
+ 4. (pick-drill curiosity drill1 sitee)
+ 5. (move curiosity sitee sitef)
+ 6. (collect-hard curiosity rock5 sitef bay1 drill1)
+ 7. (move curiosity sitef sitee)
+ 8. (move curiosity sitee sitec)
+ 9. (collect-hard curiosity rock3 sitec bay2 drill1)
+10. (move curiosity sitec sitea)
+11. (move curiosity sitea base)
+12. (deposit curiosity rock3 base bay2)
+13. (move curiosity base sitea)
+14. (collect-soft curiosity rock1 sitea bay2)
+15. (move curiosity sitea base)
+16. (deposit curiosity rock1 base bay2)
+17. (deposit curiosity rock5 base bay1)
+18. (move curiosity base siteb)
+19. (move curiosity siteb sited)
+20. (collect-soft curiosity rock4 sited bay1)
+21. (move curiosity sited siteb)
+22. (collect-soft curiosity rock2 siteb bay2)
+23. (move curiosity siteb base)
+24. (deposit curiosity rock2 base bay2)
+25. (deposit curiosity rock4 base bay1)
+Plan length (number of actions in plan): 25
+Total number of (grounded) actions in the problem: 162
+States expanded: 332520 | states generated: 337038
+Planning time: 6.96 s
+SCENARIO 1 summary
+Configuration                Plan length  Grounded actions    Expanded   Generated  Time (s)
+GBFS (satisficing)                    34               162          78         221      0.04
+A* (optimal)                          25               162        6741       13781     34.88
+BFS (optimal)                         25               162      332520      337038      6.96
+
+==============================================================================
+SCENARIO 2 (extended) | Satisficing: Greedy Best-First Search + h_add
+==============================================================================
+ 1. (move curiosity base sitea)
+ 2. (collect-soft curiosity rock1 sitea bay1)
+ 3. (move curiosity sitea base)
+ 4. (deposit curiosity rock1 base bay1)
+ 5. (move curiosity base sitea)
+ 6. (move curiosity sitea sitec)
+ 7. (move curiosity sitec sitee)
+ 8. (pick-drill curiosity drill1 sitee)
+ 9. (move curiosity sitee sitec)
+10. (collect-hard curiosity rock3 sitec bay1 drill1)
+11. (move curiosity sitec sitea)
+12. (move curiosity sitea base)
+13. (deposit curiosity rock3 base bay1)
+14. (move curiosity base sitea)
+15. (move curiosity sitea sitec)
+16. (move curiosity sitec sitee)
+17. (collect-soft curiosity rock6 sitee bay1)
+18. (move curiosity sitee sitec)
+19. (move curiosity sitec sitea)
+20. (move curiosity sitea base)
+21. (deposit curiosity rock6 base bay1)
+22. (move curiosity base sitea)
+23. (move curiosity sitea sitec)
+24. (move curiosity sitec sited)
+25. (collect-soft curiosity rock4 sited bay1)
+26. (move curiosity sited sitee)
+27. (move curiosity sitee sitec)
+28. (move curiosity sitec sitea)
+29. (move curiosity sitea base)
+30. (deposit curiosity rock4 base bay1)
+31. (move curiosity base sitea)
+32. (move curiosity sitea sitec)
+33. (move curiosity sitec sitee)
+34. (move curiosity sitee sitef)
+35. (collect-hard curiosity rock5 sitef bay1 drill1)
+36. (move curiosity sitef sitee)
+37. (move curiosity sitee sitec)
+38. (move curiosity sitec sitea)
+39. (move curiosity sitea base)
+40. (deposit curiosity rock5 base bay1)
+41. (move curiosity base sitea)
+42. (move curiosity sitea sitec)
+43. (move curiosity sitec sitee)
+44. (move curiosity sitee sitef)
+45. (collect-hard curiosity rock7 sitef bay1 drill1)
+46. (move curiosity sitef sitee)
+47. (move curiosity sitee sitec)
+48. (move curiosity sitec sitea)
+49. (move curiosity sitea base)
+50. (deposit curiosity rock7 base bay1)
+51. (move curiosity base sitea)
+52. (move curiosity sitea sitec)
+53. (move curiosity sitec sited)
+54. (move curiosity sited siteb)
+55. (collect-soft curiosity rock2 siteb bay1)
+56. (move curiosity siteb sited)
+57. (move curiosity sited sitee)
+58. (move curiosity sitee sitec)
+59. (move curiosity sitec sitea)
+60. (move curiosity sitea base)
+61. (deposit curiosity rock2 base bay1)
+Plan length (number of actions in plan): 61
+Total number of (grounded) actions in the problem: 216
+States expanded: 722 | states generated: 1652
+Planning time: 0.37 s
+==============================================================================
+SCENARIO 2 (extended) | Optimal: A* + LM-cut
+==============================================================================
+NOT FINISHED / no plan found.  States expanded so far: 204000 | time: 1805.95s
+==============================================================================
+SCENARIO 2 (extended) | Weighted A* (w=2, LM-cut); length proven optimal by exhaustive BFS below
+==============================================================================
+ 1. (move curiosity base sitea)
+ 2. (collect-soft curiosity rock1 sitea bay1)
+ 3. (move curiosity sitea base)
+ 4. (deposit curiosity rock1 base bay1)
+ 5. (move curiosity base sitea)
+ 6. (move curiosity sitea sitec)
+ 7. (move curiosity sitec sited)
+ 8. (collect-soft curiosity rock4 sited bay1)
+ 9. (move curiosity sited siteb)
+10. (collect-soft curiosity rock2 siteb bay2)
+11. (move curiosity siteb sited)
+12. (move curiosity sited sitee)
+13. (pick-drill curiosity drill1 sitee)
+14. (move curiosity sitee sitec)
+15. (move curiosity sitec sitea)
+16. (move curiosity sitea base)
+17. (deposit curiosity rock2 base bay2)
+18. (deposit curiosity rock4 base bay1)
+19. (move curiosity base sitea)
+20. (move curiosity sitea sitec)
+21. (move curiosity sitec sitee)
+22. (move curiosity sitee sitef)
+23. (collect-hard curiosity rock5 sitef bay1 drill1)
+24. (collect-hard curiosity rock7 sitef bay2 drill1)
+25. (move curiosity sitef sitee)
+26. (move curiosity sitee sitec)
+27. (move curiosity sitec sitea)
+28. (move curiosity sitea base)
+29. (deposit curiosity rock5 base bay1)
+30. (deposit curiosity rock7 base bay2)
+31. (move curiosity base sitea)
+32. (move curiosity sitea sitec)
+33. (collect-hard curiosity rock3 sitec bay1 drill1)
+34. (move curiosity sitec sitee)
+35. (collect-soft curiosity rock6 sitee bay2)
+36. (move curiosity sitee sitec)
+37. (move curiosity sitec sitea)
+38. (move curiosity sitea base)
+39. (deposit curiosity rock3 base bay1)
+40. (deposit curiosity rock6 base bay2)
+Plan length (number of actions in plan): 40
+Total number of (grounded) actions in the problem: 216
+States expanded: 2425 | states generated: 6438
+Planning time: 23.32 s
+SCENARIO 2 (extended) summary
+Configuration                Plan length  Grounded actions    Expanded   Generated  Time (s)
+GBFS (satisficing)                    61               216         722        1652      0.37
+A* (optimal)                         n/a               216      204000      418628   1805.95
+A* w=2 (verified optimal)             40               216        2425        6438     23.32
+

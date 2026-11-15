@@ -1,0 +1,13 @@
+sample_id,model,config,opening
+S01,Vanilla RNN,topk10,village
+S02,Vanilla RNN,temp0.8,exam
+S03,LSTM,temp0.8,letter
+S04,Vanilla RNN,topk10,crime
+S05,LSTM,temp0.8,robot
+S06,LSTM,topk10,crime
+S07,LSTM,topk10,exam
+S08,Vanilla RNN,temp0.8,robot
+S09,LSTM,topk10,village
+S10,Vanilla RNN,topk10,exam
+S11,LSTM,temp0.8,exam
+S12,Vanilla RNN,temp0.8,letter

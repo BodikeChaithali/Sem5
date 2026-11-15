@@ -1,0 +1,24 @@
+ANALYSIS REPORT: Mars Rover Sample Collection Planning (PDDL)
+
+1. Modelling summary
+Domain.pddl uses only :strips and :typing. Types: location, rover, bay, rock, drill. Actions: move, pick-drill, collect-soft, collect-hard (requires the drill), deposit. Hard/soft rocks are static facts, and the one-way slope is the single directed fact (connected sitec sited). Problem.pddl is the original scenario; Problem_extended.pddl adds Rock6 (soft, SiteE) and Rock7 (hard, SiteF), closes Base<->SiteB in both directions, and requires Rock1-Rock7 at Base. Plans were produced by a Python planner that reads these PDDL files, grounds them (162 actions for the original problem, 216 for the extended one), and searches with Greedy Best-First Search (h_add) as the satisficing configuration and A* (LM-cut) / Breadth-First Search as the optimal configuration. Every plan was validated by step-by-step simulation (all goals satisfied: all rocks at Base, both bays empty, rover at Base).
+
+2. Results
+Scenario 1 (original)
+- GBFS (satisficing): 34 actions, 78 states expanded, 0.04 s
+- A* + LM-cut (optimal): 25 actions, 6,741 states expanded, 34.88 s
+- BFS (optimal): 25 actions, 332,520 states expanded, 6.96 s
+Scenario 2 (extended)
+- GBFS (satisficing): 61 actions, 722 states expanded, 0.37 s
+- A* + LM-cut: did not finish within the 1,800 s limit (204,000 states expanded)
+- Weighted A* (w=2, LM-cut): 40 actions, 2,425 states expanded, 23.32 s
+- Exhaustive BFS check (bfs_proof.cpp) over all 22,274,690 reachable states: the goal is first reached at depth 40, so 40 is the shortest possible plan and the weighted A* plan is optimal.
+
+3. Plan length comparison (Task 6.1)
+In Scenario 1 the satisficing plan has 34 actions and the optimal plan 25, so the greedy plan is 9 actions (36%) longer. In Scenario 2 the figures are 61 and 40, so the greedy plan is 21 actions (52%) longer. GBFS follows only the heuristic estimate of distance to the goal and ignores the cost already spent, so it quickly finds a valid plan, but not a short one. In both scenarios its plan carries a single rock at a time (always Bay1) and makes one round trip to Base per rock. Optimal search (A* with the admissible LM-cut heuristic, or BFS) guarantees the minimum number of actions. It pays for this with far more expanded states and time (6,741 or 332,520 states against 78 in Scenario 1), and in Scenario 2 plain A* did not finish within the time limit, which is why weighted A* plus the exhaustive BFS check was used.
+
+4. Use of the storage bays and the drill (Task 6.2, optimal plan of Scenario 1)
+The optimal plan uses both bays at the same time. The rover collects Rock2 into Bay1 at SiteB (step 2) and Rock4 into Bay2 at SiteD (step 4), returns to Base and deposits both (steps 7-8). It then goes Base -> SiteA -> SiteC -> SiteE and picks up the drill at SiteE at step 12 of 25. With the drill it collects Rock5 at SiteF into Bay1 (step 14) and, on the way back, Rock3 at SiteC into Bay2 (step 17), and delivers both together (steps 20-21). Only Rock1 is fetched alone at the end (steps 22-25). The drill is picked up before any hard rock is collected and is never put down. Optimal plans are not unique: the BFS plan, also 25 actions, picks the drill up at step 4 and does the hard-rock trip first. In every optimal plan both bays are used together, because carrying two rocks per trip saves round trips to Base. The greedy plan uses only Bay1.
+
+5. Extended scenario after the dust storm (Task 6.3)
+With Base<->SiteB closed, SiteB can only be reached from SiteD (SiteD<->SiteB is still two-way), so the rover must first reach SiteD. In the optimal plan it goes Base -> SiteA -> SiteC and then takes the one-way slope SiteC -> SiteD (step 7) -- the one-way route is used, once, in its allowed (downhill) direction. At SiteD it collects Rock4 (Bay1), goes to SiteB and collects Rock2 (Bay2), returns to SiteD and continues to SiteE, where it picks up the drill (step 13), then returns to Base via SiteC and SiteA. The move SiteD -> SiteC never occurs, because it is not allowed. Later trips deliver Rock5 and Rock7 together from SiteF (both bays), then Rock3 (SiteC) and Rock6 (SiteE) together. The greedy plan also enters SiteB only from SiteD, but it uses the slope twice because it makes one trip per rock.

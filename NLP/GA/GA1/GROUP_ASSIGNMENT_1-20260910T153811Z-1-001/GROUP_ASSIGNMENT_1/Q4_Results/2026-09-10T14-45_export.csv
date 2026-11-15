@@ -1,0 +1,3 @@
+,sentence,pcfg_result,pcfg_score,bigram_score,trigram_score,chosen_method,final_verdict,segmentation_merges,spelling_corrections
+0,the quick brown fox jumps over the lazy dog.,PARSED,-114.55764125701049,-87.31344939256755,-85.75684675336424,PCFG,Likely grammatical,0,0
+1,she eats a green salad and i would like to sea the world.,PARSED,-114.60760963313753,-106.38062956858994,-84.58549099610062,PCFG,Likely grammatical,0,0

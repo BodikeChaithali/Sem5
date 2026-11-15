@@ -1,0 +1,37 @@
+sample_id,coherence,grammar,relevance,creativity,rater,model,config,opening
+S01,2,3,1,2,rater1,Vanilla RNN,topk10,village
+S02,1,2,1,1,rater1,Vanilla RNN,temp0.8,exam
+S03,2,3,1,2,rater1,LSTM,temp0.8,letter
+S04,2,3,1,2,rater1,Vanilla RNN,topk10,crime
+S05,2,3,1,2,rater1,LSTM,temp0.8,robot
+S06,2,3,1,1,rater1,LSTM,topk10,crime
+S07,2,3,2,2,rater1,LSTM,topk10,exam
+S08,1,2,1,1,rater1,Vanilla RNN,temp0.8,robot
+S09,2,3,2,2,rater1,LSTM,topk10,village
+S10,1,2,1,1,rater1,Vanilla RNN,topk10,exam
+S11,2,3,2,3,rater1,LSTM,temp0.8,exam
+S12,1,2,1,1,rater1,Vanilla RNN,temp0.8,letter
+S01,2,3,1,3,rater2,Vanilla RNN,topk10,village
+S02,2,3,1,2,rater2,Vanilla RNN,temp0.8,exam
+S03,2,4,2,2,rater2,LSTM,temp0.8,letter
+S04,2,3,2,2,rater2,Vanilla RNN,topk10,crime
+S05,3,4,1,3,rater2,LSTM,temp0.8,robot
+S06,2,3,2,2,rater2,LSTM,topk10,crime
+S07,3,4,3,2,rater2,LSTM,topk10,exam
+S08,1,2,1,2,rater2,Vanilla RNN,temp0.8,robot
+S09,3,4,3,2,rater2,LSTM,topk10,village
+S10,2,3,1,2,rater2,Vanilla RNN,topk10,exam
+S11,3,3,3,3,rater2,LSTM,temp0.8,exam
+S12,2,3,1,1,rater2,Vanilla RNN,temp0.8,letter
+S01,2,3,1,2,rater3,Vanilla RNN,topk10,village
+S02,1,3,1,2,rater3,Vanilla RNN,temp0.8,exam
+S03,2,3,2,2,rater3,LSTM,temp0.8,letter
+S04,2,3,1,2,rater3,Vanilla RNN,topk10,crime
+S05,3,4,1,2,rater3,LSTM,temp0.8,robot
+S06,2,3,1,2,rater3,LSTM,topk10,crime
+S07,2,3,2,2,rater3,LSTM,topk10,exam
+S08,1,2,1,1,rater3,Vanilla RNN,temp0.8,robot
+S09,3,4,2,2,rater3,LSTM,topk10,village
+S10,1,3,1,2,rater3,Vanilla RNN,topk10,exam
+S11,2,3,2,3,rater3,LSTM,temp0.8,exam
+S12,1,3,1,1,rater3,Vanilla RNN,temp0.8,letter

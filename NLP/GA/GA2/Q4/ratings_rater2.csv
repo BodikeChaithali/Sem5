@@ -1,0 +1,13 @@
+sample_id,prompt,coherence,grammar,relevance,creativity
+S01,"The sun rose over the little village. When everyone woke up, nobody could remember what happened yesterday.",2,3,1,3
+S02,"A girl opened her test paper and saw something strange. The paper had the answers to tomorrow's questions.",2,3,1,2
+S03,"A boy found a letter in the mail. It was written to him by someone one hundred years in the future.",2,4,2,2
+S04,"The detective was sitting in his office. He was looking at a case of a crime that had not happened yet.",2,3,2,2
+S05,"An old robot sat alone in the garden. One day, it got a message from its future self.",3,4,1,3
+S06,"The detective was sitting in his office. He was looking at a case of a crime that had not happened yet.",2,3,2,2
+S07,"A girl opened her test paper and saw something strange. The paper had the answers to tomorrow's questions.",3,4,3,2
+S08,"An old robot sat alone in the garden. One day, it got a message from its future self.",1,2,1,2
+S09,"The sun rose over the little village. When everyone woke up, nobody could remember what happened yesterday.",3,4,3,2
+S10,"A girl opened her test paper and saw something strange. The paper had the answers to tomorrow's questions.",2,3,1,2
+S11,"A girl opened her test paper and saw something strange. The paper had the answers to tomorrow's questions.",3,3,3,3
+S12,"A boy found a letter in the mail. It was written to him by someone one hundred years in the future.",2,3,1,1

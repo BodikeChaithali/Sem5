@@ -1,0 +1,12 @@
+Metric,Model A (no attention),Model B (attention)
+Parameters,"16,966,432","17,818,912"
+Best epoch (val loss) / epochs run,15 / 15,15 / 15
+Training time (s),600,817
+Final-epoch train loss / acc,4.2071 / 0.2762,3.4832 / 0.3629
+Best val loss / acc @best epoch,5.1401 / 0.2531,4.6688 / 0.2910
+TEST teacher-forced loss / ppl / acc,5.1085 / 165.4 / 0.2496,4.6478 / 104.4 / 0.2915
+TEST BLEU (greedy),0.40,2.12
+TEST chrF (greedy),4.71,11.69
+TEST exact-match rate,0.0000,0.0000
+Hyp/ref length ratio (all test),1.039,1.056
+% hypotheses that ended with <EOS>,93.2,92.7

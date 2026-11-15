@@ -1,0 +1,584 @@
+
+; ============================================================
+; LL(1) PREDICTIVE PARSER - 8085
+; Based on the supplied LL(1) report
+;
+; Grammar:
+; E  -> T E'
+; E' -> + T E' | epsilon
+; T  -> F T'
+; T' -> * F T' | epsilon
+; F  -> id | ( E )
+;
+; Input: ASCII expression at 8200H
+; Lexer output: 8000H
+; Logical stack: 8020H - 803FH
+; Parsing table: 8040H - 805DH
+; Descriptors: 8060H - 806FH
+; RHS array: 8070H - 807DH
+; Control variables: 8080H - 808FH
+; Hardware stack: 80E0H - 80FFH
+;
+; STATUS 808CH:
+; 00 = Running
+; 01 = Accepted
+; FF = Rejected
+;
+; ERROR CODE 808DH:
+; 01 = Terminal mismatch
+; 02 = Empty table entry / invalid token
+; 03 = Stack overflow
+; 04 = Stack underflow
+; 05 = Invalid input character
+; 06 = Input buffer overflow
+; ============================================================
+
+        ORG 0000H
+
+START:
+        LXI SP, 8100H
+
+        XRA A
+        STA 808CH
+        STA 808DH
+
+; First convert ASCII input into token codes
+
+        CALL LEXER
+
+; Initialize logical parser stack
+
+        LXI H, 8020H
+        MVI M, 06H
+        INX H
+        MVI M, 10H
+        INX H
+        SHLD 8080H
+
+; Initialize input pointer
+
+        LXI H, 8000H
+        SHLD 8082H
+
+; ============================================================
+; MAIN PARSING LOOP
+; ============================================================
+
+PARSE_LOOP:
+
+        LHLD 8082H
+        MOV A, M
+        STA 8084H
+
+; Pop symbol from logical stack
+
+        LHLD 8080H
+
+        MOV A, H
+        CPI 80H
+        JNZ STACK_UNDERFLOW
+
+        MOV A, L
+        CPI 20H
+        JZ STACK_UNDERFLOW
+
+        DCX H
+        MOV A, M
+        STA 8085H
+        SHLD 8080H
+
+; Check terminal or nonterminal
+
+        CPI 10H
+        JC TERMINAL_CASE
+
+; ============================================================
+; NONTERMINAL CASE
+; ============================================================
+
+NONTERMINAL_CASE:
+
+; Row = nonterminal - 10H
+
+        LDA 8085H
+        SUI 10H
+        CPI 05H
+        JNC EMPTY_TABLE_ERROR
+
+        STA 8086H
+
+; Column = lookahead - 01H
+
+        LDA 8084H
+        DCR A
+        CPI 06H
+        JNC EMPTY_TABLE_ERROR
+
+        STA 8087H
+
+; Calculate table address = 8040H + row * 6 + column
+
+        LXI H, 8040H
+        LXI D, 0006H
+
+        LDA 8086H
+        MOV B, A
+
+ROW_LOOP:
+        MOV A, B
+        ORA A
+        JZ COLUMN_ADD
+
+        DAD D
+        DCR B
+        JMP ROW_LOOP
+
+COLUMN_ADD:
+        LDA 8087H
+        MOV E, A
+        MVI D, 00H
+        DAD D
+
+; Read production ID
+
+        MOV A, M
+        STA 8088H
+
+        ORA A
+        JZ EMPTY_TABLE_ERROR
+
+; ============================================================
+; DESCRIPTOR LOOKUP
+; Address = 8060H + 2 * (production ID - 1)
+; ============================================================
+
+        LDA 8088H
+        DCR A
+        ADD A
+        ADI 60H
+        MOV L, A
+        MVI H, 80H
+
+; Read RHS length
+
+        MOV A, M
+        STA 8089H
+
+        INX H
+
+; Read RHS offset
+
+        MOV A, M
+        STA 808AH
+
+; Epsilon production: length = 0
+
+        LDA 8089H
+        ORA A
+        JZ PARSE_LOOP
+
+; ============================================================
+; PUSH RHS IN REVERSE ORDER
+; ============================================================
+
+; RHS starting address = 8070H + offset
+
+        LDA 808AH
+        ADI 70H
+        MOV L, A
+        MVI H, 80H
+
+; Move to last RHS symbol
+
+        LDA 8089H
+        MOV B, A
+        DCR B
+
+        MOV A, L
+        ADD B
+        MOV L, A
+
+; Loop count = RHS length
+
+        LDA 8089H
+        MOV B, A
+
+PUSH_RHS_LOOP:
+
+        MOV A, M
+        MOV C, A
+
+        PUSH H
+        CALL PUSH_SYMBOL
+        POP H
+
+        DCX H
+        DCR B
+        JNZ PUSH_RHS_LOOP
+
+        JMP PARSE_LOOP
+
+; ============================================================
+; TERMINAL CASE
+; ============================================================
+
+TERMINAL_CASE:
+
+        MOV B, A
+
+        LDA 8084H
+        CMP B
+        JNZ TERMINAL_ERROR
+
+; If matched terminal is $, accept
+
+        MOV A, B
+        CPI 06H
+        JZ PARSE_ACCEPT
+
+; Advance input pointer
+
+        LHLD 8082H
+        INX H
+        SHLD 8082H
+
+        JMP PARSE_LOOP
+
+; ============================================================
+; LOGICAL STACK PUSH
+; Input: C = symbol
+; PSP = next free location
+; ============================================================
+
+PUSH_SYMBOL:
+
+        LHLD 8080H
+
+        MOV A, H
+        CPI 80H
+        JNZ STACK_OVERFLOW
+
+        MOV A, L
+        CPI 40H
+        JNC STACK_OVERFLOW
+
+        MOV A, C
+        MOV M, A
+
+        INX H
+        SHLD 8080H
+
+        RET
+
+; ============================================================
+; LEXICAL ANALYZER
+; ASCII input starts at 8200H
+; Token buffer starts at 8000H
+; ============================================================
+
+LEXER:
+
+        LXI H, 8200H
+        LXI D, 8000H
+
+LEX_LOOP:
+
+        MOV A, M
+        ORA A
+        JZ LEX_END
+
+; Ignore space, TAB, LF and CR
+
+        CPI 20H
+        JZ LEX_SKIP
+
+        CPI 09H
+        JZ LEX_SKIP
+
+        CPI 0AH
+        JZ LEX_SKIP
+
+        CPI 0DH
+        JZ LEX_SKIP
+
+; Check uppercase letters A-Z
+
+        CPI 41H
+        JC LEX_CHECK_LOWER
+
+        CPI 5BH
+        JC LEX_IDENTIFIER
+
+; Check lowercase letters a-z
+
+LEX_CHECK_LOWER:
+
+        CPI 61H
+        JC LEX_OPERATOR
+
+        CPI 7BH
+        JC LEX_IDENTIFIER
+
+        JMP LEX_OPERATOR
+
+; An identifier is converted into one id token
+
+LEX_IDENTIFIER:
+
+        MVI A, 01H
+        CALL STORE_TOKEN
+
+; Skip remaining letters in the same identifier
+
+LEX_ID_SCAN:
+
+        INX H
+        MOV A, M
+
+        CPI 41H
+        JC LEX_ID_LOWER
+
+        CPI 5BH
+        JC LEX_ID_SCAN
+
+LEX_ID_LOWER:
+
+        CPI 61H
+        JC LEX_LOOP
+
+        CPI 7BH
+        JC LEX_ID_SCAN
+
+        JMP LEX_LOOP
+
+; Recognize operators
+
+LEX_OPERATOR:
+
+        CPI 2BH             ; +
+        JZ LEX_PLUS
+
+        CPI 2AH             ; *
+        JZ LEX_MULTIPLY
+
+        CPI 28H             ; (
+        JZ LEX_OPEN
+
+        CPI 29H             ; )
+        JZ LEX_CLOSE
+
+        JMP INVALID_CHARACTER
+
+LEX_PLUS:
+
+        MVI A, 02H
+        CALL STORE_TOKEN
+        JMP LEX_NEXT
+
+LEX_MULTIPLY:
+
+        MVI A, 03H
+        CALL STORE_TOKEN
+        JMP LEX_NEXT
+
+LEX_OPEN:
+
+        MVI A, 04H
+        CALL STORE_TOKEN
+        JMP LEX_NEXT
+
+LEX_CLOSE:
+
+        MVI A, 05H
+        CALL STORE_TOKEN
+        JMP LEX_NEXT
+
+LEX_SKIP:
+
+        INX H
+        JMP LEX_LOOP
+
+LEX_NEXT:
+
+        INX H
+        JMP LEX_LOOP
+
+; Add input end-marker $
+
+LEX_END:
+
+        MVI A, 06H
+        CALL STORE_TOKEN
+        RET
+
+; ============================================================
+; STORE TOKEN IN TOKEN BUFFER
+; A = token code
+; ============================================================
+
+STORE_TOKEN:
+
+        MOV C, A
+
+; Check buffer boundary 8020H
+
+        MOV A, D
+        CPI 80H
+        JNZ INPUT_OVERFLOW
+
+        MOV A, E
+        CPI 20H
+        JNC INPUT_OVERFLOW
+
+        MOV A, C
+        STAX D
+        INX D
+
+        RET
+
+; ============================================================
+; SUCCESS
+; ============================================================
+
+PARSE_ACCEPT:
+
+        MVI A, 01H
+        STA 808CH
+        HLT
+
+; ============================================================
+; ERROR HANDLING
+; ============================================================
+
+TERMINAL_ERROR:
+
+        MVI A, 01H
+        STA 808DH
+        JMP PARSE_ERROR
+
+EMPTY_TABLE_ERROR:
+
+        MVI A, 02H
+        STA 808DH
+        JMP PARSE_ERROR
+
+STACK_OVERFLOW:
+
+        MVI A, 03H
+        STA 808DH
+        JMP PARSE_ERROR
+
+STACK_UNDERFLOW:
+
+        MVI A, 04H
+        STA 808DH
+        JMP PARSE_ERROR
+
+INVALID_CHARACTER:
+
+        MVI A, 05H
+        STA 808DH
+        JMP PARSE_ERROR
+
+INPUT_OVERFLOW:
+
+        MVI A, 06H
+        STA 808DH
+        JMP PARSE_ERROR
+
+PARSE_ERROR:
+
+        MVI A, 0FFH
+        STA 808CH
+        HLT
+
+; ============================================================
+; LL(1) PARSING TABLE
+; Columns: id, +, *, (, ), $
+; Rows: E, E', T, T', F
+; ============================================================
+
+        ORG 8040H
+
+; E
+
+        DB 01H,00H,00H,01H,00H,00H
+
+; E'
+
+        DB 00H,02H,00H,00H,03H,03H
+
+; T
+
+        DB 04H,00H,00H,04H,00H,00H
+
+; T'
+
+        DB 00H,06H,05H,00H,06H,06H
+
+; F
+
+        DB 07H,00H,00H,08H,00H,00H
+
+; ============================================================
+; PRODUCTION DESCRIPTORS
+; Format: RHS length, RHS offset
+; ============================================================
+
+        ORG 8060H
+
+; P1: E -> T E'
+
+        DB 02H,00H
+
+; P2: E' -> + T E'
+
+        DB 03H,02H
+
+; P3: E' -> epsilon
+
+        DB 00H,05H
+
+; P4: T -> F T'
+
+        DB 02H,05H
+
+; P5: T' -> * F T'
+
+        DB 03H,07H
+
+; P6: T' -> epsilon
+
+        DB 00H,0AH
+
+; P7: F -> id
+
+        DB 01H,0AH
+
+; P8: F -> ( E )
+
+        DB 03H,0BH
+
+; ============================================================
+; RHS SYMBOL ARRAY
+; ============================================================
+
+        ORG 8070H
+
+        DB 12H,11H
+        DB 02H,12H,11H
+        DB 14H,13H
+        DB 03H,14H,13H
+        DB 01H
+        DB 04H,10H,05H
+
+; ============================================================
+; ASCII INPUT
+; CHANGE ONLY THIS LINE TO TEST ANOTHER EXPRESSION
+; ============================================================
+
+        ORG 8200H
+
+        DB 'a+b*c',00H
+
+        END

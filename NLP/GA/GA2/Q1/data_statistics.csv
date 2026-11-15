@@ -1,0 +1,16 @@
+Statistic,Value
+Training pairs used,50000
+Validation pairs used,517
+Test pairs used,2466
+English vocabulary size (incl. 4 special tokens),18490
+Hindi vocabulary size (incl. 4 special tokens),20000
+Distinct English types in train (before min_freq cut),37079
+Distinct Hindi types in train (before min_freq cut),48971
+"Max English length in train, tokens (excl. <SOS>/<EOS>)",40
+"Max Hindi length in train, tokens (excl. <SOS>/<EOS>)",40
+Max English length incl. <SOS>/<EOS> (train),42
+Max Hindi length incl. <SOS>/<EOS> (train),42
+"Max English / Hindi length in test, tokens",59 / 60
+"Mean English / Hindi length in train, tokens",11.58 / 12.21
+<unk> rate English train / test (tokens),0.0321 / 0.0781
+<unk> rate Hindi   train / test (tokens),0.0476 / 0.0826

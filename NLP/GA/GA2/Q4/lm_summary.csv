@@ -1,0 +1,3 @@
+Model,Parameters,Train time (s),Epochs run,Val loss,Val PPL,Test loss,Test PPL
+Vanilla RNN,4207711,128.0,10,2.7239,15.24,2.7171,15.14
+LSTM,5390431,184.6,10,2.4819,11.96,2.4752,11.88
